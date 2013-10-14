@@ -6,6 +6,7 @@ var Generator = function(callback,hz,burst) {
   this.last = null;
   this.count = 0;
   this.interval = null;
+  this.stopped = false;
   
   if (hz > 1000) {
     throw "Unsupported hz > 1000: use null to send as many events as possible";
@@ -26,7 +27,7 @@ Generator.prototype = {
     
   next: function() {
     var t = this;
-    if (!this.hz) {
+    if (!this.hz && !this.stopped) {
       process.nextTick(function() {
         t.write();
       });
@@ -40,7 +41,7 @@ Generator.prototype = {
   },
   
   doWrite: function(timestamp) {
-    var res = callback(now);
+    var res = this.callback(timestamp);
     
     this.count++;
     return res;
@@ -73,9 +74,16 @@ Generator.prototype = {
     }
     
     this.next();
+  },
+  
+  stop: function() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.stopped = true;
+    
   }
     
 };
-
 
 exports.Generator = Generator;
