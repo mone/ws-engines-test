@@ -1,7 +1,7 @@
 var LOG_INTERVAL = 5000;
 
-var Generator = function(callback,hz,burst) {
-  this.callback = callback;
+var Generator = function(hz,burst) {
+  
   
   this.last = null;
   this.count = 0;
@@ -18,12 +18,17 @@ var Generator = function(callback,hz,burst) {
     process.maxTickDepth = burst;
   }
   
-  this.next();
+ 
 };
 
 
 
 Generator.prototype = {
+   
+  setCallback: function(cb) {
+    this.callback = cb;
+    this.next();
+  },
     
   next: function() {
     var t = this;
