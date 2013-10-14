@@ -1,0 +1,21 @@
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="require.js"></script>
+<script>
+  var server = document.location.protocol+"//"+document.location.host;
+  
+  require(["./Stats"],function(Stats) {
+    var stat = new Stats();
+    
+    var socket = io.connect(server);
+    
+    socket.on('hertz', function (data) {
+      stat.hertz(data.t);
+    });
+    
+    socket.on('timestamp', function (data) {
+      stat.timestamp(data.t);
+    });  
+  });
+  
+</script>
