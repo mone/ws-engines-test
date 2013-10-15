@@ -1,7 +1,7 @@
-var LOG_INTERVAL = 5000;
-
-var Generator = function(callback,hz,burst) {
+var Generator = function(callback,logInterval,hz,burst) {
   this.callback = callback;
+  
+  this.logInterval = logInterval;
   
   this.last = null;
   this.count = 0;
@@ -54,16 +54,16 @@ Generator.prototype = {
     }
     
     if (this.lastLog) {
-      if (now-this.lastLog > LOG_INTERVAL) {
+      if (now-this.lastLog > this.logInterval) {
         if (this.hz) {
-          var expected = (LOG_INTERVAL / 1000) * this.hz;
+          var expected = (this.logInterval / 1000) * this.hz;
           if (this.count != expected) {
-            console.log("Sent " + this.count + " in the last " + LOG_INTERVAL + " millis (was expecting " + expected + ")");
+            console.log("Sent " + this.count + " in the last " + this.logInterval + " millis (was expecting " + expected + ")");
           } else {
-            console.log("Sent " + this.count + " in the last " + LOG_INTERVAL + " millis (as expected)");
+            console.log("Sent " + this.count + " in the last " + this.logInterval + " millis (as expected)");
           }
         } else {
-          console.log("Sent " + this.count + " in the last " + LOG_INTERVAL + " millis");
+          console.log("Sent " + this.count + " in the last " + this.logInterval + " millis");
         }
         
         this.lastLog = now;

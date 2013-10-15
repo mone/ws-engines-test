@@ -1,14 +1,14 @@
 define([],function() {
   
-  var LOG_INTERVAL = 5000;
-  
-  var Stats = function() {
+  var Stats = function(logInterval) {
     this.div = document.createElement("div");
     document.body.appendChild(this.div);
     
     this.lastLog = null;
     this.hz = null;
     this.count = 0;
+    
+    this.logInterval = logInterval;
     
   };
   
@@ -22,20 +22,20 @@ define([],function() {
       var now = new Date().getTime();
       
       if (this.lastLog) {
-        if (now-this.lastLog > LOG_INTERVAL) {
+        if (now-this.lastLog > this.logInterval) {
           
           var diff = now - ts;
           console.log("Current delay = " + diff);
           
           if (this.hz) {
-            var expected = (LOG_INTERVAL / 1000) * this.hz;
+            var expected = (this.logInterval / 1000) * this.hz;
             if (this.count != expected) {
-              console.log("Received " + this.count + " in the last " + LOG_INTERVAL + " millis (was expecting " + expected + ")");
+              console.log("Received " + this.count + " in the last " + this.logInterval + " millis (was expecting " + expected + ")");
             } else {
-              console.log("Received " + this.count + " in the last " + LOG_INTERVAL + " millis (as expected)");
+              console.log("Received " + this.count + " in the last " + this.logInterval + " millis (as expected)");
             }
           } else {
-            console.log("Received " + this.count + " in the last " + LOG_INTERVAL + " millis");
+            console.log("Received " + this.count + " in the last " + this.logInterval + " millis");
           }
           
           this.lastLog = now;

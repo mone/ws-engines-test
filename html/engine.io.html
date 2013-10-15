@@ -1,4 +1,4 @@
-<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="engine.io.js"></script>
 <script src="require.js"></script>
 <script>
   var server = document.location.protocol+"//"+document.location.host;
@@ -6,13 +6,13 @@
   require(["./Stats"],function(Stats) {
     var stat = null;
     
-    var socket = new SockJS(server+'/sockjs');
-
+    var socket = eio(server);
+    
     var timestamphandler = function(data) {
       stat.timestamp(data.data);
     }
     
-    socket.onmessage = function(data) {
+    socket.onmessage = function(data){
       if (!stat) {
         //first message is the log frequency
         stat = new Stats(data.data);
@@ -22,8 +22,7 @@
         //then timestamps
         socket.onmessage = timestamphandler;  
       }
-    }; 
-    
+    };
   });
   
 </script>

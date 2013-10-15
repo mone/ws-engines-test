@@ -5,9 +5,13 @@
   var server = document.location.protocol+"//"+document.location.host;
   
   require(["./Stats"],function(Stats) {
-    var stat = new Stats();
+    var stat = null
     
     var socket = io.connect(server);
+    
+    socket.on('log', function (data) {
+      stat = new Stats(data.t);
+    });
     
     socket.on('hertz', function (data) {
       stat.hertz(data.t);
