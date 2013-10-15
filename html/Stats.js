@@ -7,6 +7,7 @@ define([],function() {
     this.lastLog = null;
     this.hz = null;
     this.count = 0;
+    this.expectingCount = 0;
     
     this.logInterval = logInterval;
     
@@ -14,9 +15,19 @@ define([],function() {
   
   Stats.prototype = {
     
-    timestamp: function(ts) {
+    timestamp: function(ts,count) {
       this.div.innerHTML = ts;
       this.count++;
+      
+      if (this.expectingCount) {
+        
+        var diff = count - this.expectingCount;
+        if (diff > 0) {
+          console.log(diff + " lost messages");
+        }
+        
+      }
+      this.expectingCount = count+1;
       
       
       var now = new Date().getTime();

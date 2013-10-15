@@ -12,9 +12,9 @@ exports.run = function(server,logInterval,hertz,burst) {
     conn.write(logInterval);
     conn.write(hertz);
     
-    var generator = new Generator(function(data) {
+    var generator = new Generator(function(ts,count) {
       //says it implements the Stream interface but does not tell if it ever returns false and/or what to do in such case.
-      conn.write(data);
+      conn.write(ts+"|"+count);
     },logInterval,hertz,burst);
 
     conn.on('close', function() {

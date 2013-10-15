@@ -5,6 +5,7 @@ var Generator = function(callback,logInterval,hz,burst) {
   
   this.last = null;
   this.count = 0;
+  this.fullCount = 0;
   this.interval = null;
   this.stopped = false;
   
@@ -41,7 +42,7 @@ Generator.prototype = {
   },
   
   doWrite: function(timestamp) {
-    var res = this.callback(timestamp);
+    var res = this.callback(timestamp,this.fullCount++);
     
     this.count++;
     return res;

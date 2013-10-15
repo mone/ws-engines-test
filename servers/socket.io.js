@@ -14,8 +14,8 @@ exports.run = function(server,logInterval,hertz,burst) {
     socket.emit("log", {t:logInterval});
     socket.emit("hertz", {t:hertz});
     
-    var generator = new Generator(function(data) {
-      socket.emit("timestamp", {t:data});
+    var generator = new Generator(function(ts,count) {
+      socket.emit("timestamp", {t:ts,c:count});
     },logInterval,hertz,burst);
 
     socket.on('disconnect', function(){

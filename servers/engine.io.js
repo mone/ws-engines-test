@@ -8,9 +8,9 @@ exports.run = function(server,logInterval,hertz,burst) {
     socket.send(logInterval);
     socket.send(hertz);
 
-    var generator = new Generator(function(data) {
+    var generator = new Generator(function(ts,count) {
       //says it implements the Stream interface but does not tell if it ever returns false and/or what to do in such case.
-      socket.send(data);
+      socket.send(ts+"|"+count);
     },logInterval,hertz,burst);
     
     socket.on('close', function () { 

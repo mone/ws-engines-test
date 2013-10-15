@@ -9,7 +9,8 @@
     var socket = eio(server);
     
     var timestamphandler = function(data) {
-      stat.timestamp(data.data);
+      var data = data.data.split("|");
+      stat.timestamp(data[0],data[1]);
     }
     
     socket.onmessage = function(data){
