@@ -59,6 +59,27 @@ process.argv.forEach(function (val, index, array) {
 var app = require('express')();
 var server = require('http').createServer(app);
 
+if (engine == "sockjs") {
+ /*
+  
+  */
+  require("./servers/sockjs.js").run(server,hertz,burst);
+ 
+  
+} else if(engine == "engine.io") { 
+  console.error("to be implemented");
+  process.exit(1);
+  
+} else if(engine == "socket.io") {
+    
+  require("./servers/socket.io.js").run(server,hertz,burst);
+  
+} else if(engine == "primus") {
+  console.error("to be implemented?");
+  process.exit(1);
+
+}
+
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/html/'+engine+'.html');
 });
@@ -68,53 +89,6 @@ app.get('/require.js', function (req, res) {
 app.get('/Stats.js', function (req, res) {
   res.sendfile(__dirname + '/html/Stats.js');
 });
-
-
-var Generator = require("./Generator.js").Generator;
-var generator = new Generator(hertz,burst);
-
-if (engine == "SockJS") {
- /*
-  var http = require('http');
-  var sockjs = require('sockjs');
-
-  var sjs = sockjs.createServer(/*{
-    heartbeat_delay: 25000 
-    disconnect_delay: 9000 
-  });
-  sjs.on('connection', function(conn) {
-   
-    conn.write(hertz);
-    
-    
-    var g = new Generator(function(data) {
-      //says it implements the Stream interface but does not tell if it ever returns false and/or what to do in such case.
-      conn.write(data);
-    },hertz,burst);
-    
-    conn.on('close', function() {
-      g.stop();
-    });
-  });
-
-  sjs.installHandlers(server, {prefix:'/sockjs'});
-  */
-  
- 
-  
-} else if(engine == "engine.io") { 
-  console.error("to be implemented");
-  process.exit(1);
-  
-} else if(engine == "socket.io") {
-    
-  require("./servers/socket.io.js").run(server,generator,hertz);
-  
-} else if(engine == "primus") {
-  console.error("to be implemented?");
-  process.exit(1);
-
-}
 
 server.listen(port);
 

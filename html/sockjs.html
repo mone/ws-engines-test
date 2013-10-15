@@ -1,0 +1,32 @@
+<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="require.js"></script>
+<script>
+  var server = document.location.protocol+"//"+document.location.host;
+  
+  require(["./Stats"],function(Stats) {
+    var stat = new Stats();
+    
+    var socket = new SockJS(server+'/sockjs');
+
+    var timestamphandler = function(data) {
+      stat.timestamp(data.data);
+    }
+    
+    socket.onmessage = function(data) {
+      stat.hertz(data.data);
+      //first message is hertz then timestamps
+      socket.onmessage = timestamphandler;
+    }; 
+    
+    
+    
+    /*('hertz', function (data) {
+      stat.hertz(data.t);
+    });
+    
+    socket.on('timestamp', function (data) {
+      stat.timestamp(data.t);
+    });*/  
+  });
+  
+</script>

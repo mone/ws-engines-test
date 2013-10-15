@@ -1,4 +1,6 @@
-exports.run = function(server,generator,hertz) {
+var Generator = require("../Generator").Generator;
+
+exports.run = function(server,hertz,burst) {
   var io = require('socket.io').listen(server);
   /*
   io.set('heartbeat timeout',10000);
@@ -11,12 +13,12 @@ exports.run = function(server,generator,hertz) {
     
     socket.emit("hertz", {t:hertz});
     
-    generator.setCallback(function(data) {
+    var generator = new Generator(function(data) {
       socket.emit("timestamp", {t:data});
-    });
+    },hertz,burst);
 
     socket.on('disconnect', function(){
-      g.stop();
+      generator.stop();
     });
   });
   
