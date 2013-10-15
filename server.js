@@ -59,32 +59,16 @@ process.argv.forEach(function (val, index, array) {
 var app = require('express')();
 var server = require('http').createServer(app);
 
-if (engine == "sockjs") {
- /*
-  
-  */
-  require("./servers/sockjs.js").run(server,hertz,burst);
- 
-  
-} else if(engine == "engine.io") { 
-  console.error("to be implemented");
-  process.exit(1);
-  
-} else if(engine == "socket.io") {
-    
-  require("./servers/socket.io.js").run(server,hertz,burst);
-  
-} else if(engine == "primus") {
-  console.error("to be implemented?");
-  process.exit(1);
-
-}
+require("./servers/"+engine+".js").run(server,hertz,burst);
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/html/'+engine+'.html');
 });
 app.get('/require.js', function (req, res) {
   res.sendfile(__dirname + '/html/require.js');
+});
+app.get('/engine.io.js', function (req, res) {
+  res.sendfile(__dirname + '/html/engine.io.js');
 });
 app.get('/Stats.js', function (req, res) {
   res.sendfile(__dirname + '/html/Stats.js');

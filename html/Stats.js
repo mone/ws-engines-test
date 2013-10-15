@@ -20,8 +20,13 @@ define([],function() {
       
       
       var now = new Date().getTime();
+      
       if (this.lastLog) {
         if (now-this.lastLog > LOG_INTERVAL) {
+          
+          var diff = now - ts;
+          console.log("Current delay = " + diff);
+          
           if (this.hz) {
             var expected = (LOG_INTERVAL / 1000) * this.hz;
             if (this.count != expected) {
